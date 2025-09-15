@@ -31,7 +31,7 @@ export class FirebaseService {
     payload: string,
     tokens: string[],
     logs: NotificationLog[],
-    failedTokens: string[],
+    failedTokens: string[]
   ): Promise<void> {
     if (!this.app || !tokens.length) return;
 
@@ -67,9 +67,7 @@ export class FirebaseService {
         } else if (res.error) {
           const e = res.error.code;
           console.warn(
-            `Failed to send FCM to token ${
-              tokens[i]
-            } for user ${userId}, card ${cardId}. Error: ${e}`,
+            `Failed to send FCM to token ${tokens[i]} for user ${userId}, card ${cardId}. Error: ${e}`
           );
           if (
             [

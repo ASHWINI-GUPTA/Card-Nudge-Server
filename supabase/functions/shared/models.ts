@@ -56,7 +56,6 @@ export type NotificationLog = {
   body: string;
   payload: string;
   sent_at: string;
-  is_auto_debit_enabled: boolean;
 };
 
 // Interface for language strings

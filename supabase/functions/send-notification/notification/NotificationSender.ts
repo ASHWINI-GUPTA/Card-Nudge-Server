@@ -41,9 +41,31 @@ export class NotificationSender {
       const diffDaysDue = getDaysDifference(now, dueDate);
 
       // --- ⏰  Due Reminder ---
-      if (diffDaysDue >= 0) {
+      if (diffDaysDue === 0) {
+        // Due Today
+        const msg = builder.dueReminder(
+          card.name,
+          card.last_4_digits,
+          diffDaysDue,
+          remaining,
+          currency,
+          // pass auto-debit flag if available
+          Boolean(card.is_auto_debit_enabled)
+        );
+        await this.firebaseService.sendNotification(
+          userId,
+          card.id,
+          "due",
+          msg.title,
+          msg.body,
+          payload,
+          tokens,
+          logs,
+          failedTokens
+        );
+      } else if (diffDaysDue > 0) {
+        // Due in the future
         let shouldSendDue = false;
-        // Changed: start reminders from 5 days before (not 10)
         if (diffDaysDue <= 5) {
           // Always send if due in 5 days or less (including today/tomorrow).
           shouldSendDue = true;
@@ -72,7 +94,6 @@ export class NotificationSender {
             diffDaysDue,
             remaining,
             currency,
-            // pass auto-debit flag if available
             Boolean(card.is_auto_debit_enabled)
           );
           await this.firebaseService.sendNotification(
@@ -151,24 +172,28 @@ export class NotificationSender {
       const diffDaysBilling = getDaysDifference(now, billingDate);
       let shouldSendBilling = false;
 
-      if (Math.abs(diffDaysBilling) <= 5) {
-        shouldSendBilling = true; // Every day
+      if (diffDaysBilling === 0) {
+        shouldSendBilling = true; // Always send on billing day
       } else {
-        const lastLog = await this.supabaseService.getLastNotificationLog(
-          userId,
-          card.id,
-          "billing"
-        );
-
-        if (!lastLog) {
-          shouldSendBilling = true; // Send first reminder if no log exists
+        if (Math.abs(diffDaysBilling) <= 3) {
+          shouldSendBilling = true; // Every day for 3 days before/after billing
         } else {
-          const daysSinceLastSend = getDaysDifference(
-            new Date(lastLog.sent_at),
-            now
+          const lastLog = await this.supabaseService.getLastNotificationLog(
+            userId,
+            card.id,
+            "billing"
           );
 
-          shouldSendBilling = daysSinceLastSend >= 3; // Once in 3 days
+          if (!lastLog) {
+            shouldSendBilling = true; // Send first reminder if no log exists
+          } else {
+            const daysSinceLastSend = getDaysDifference(
+              new Date(lastLog.sent_at),
+              now
+            );
+
+            shouldSendBilling = daysSinceLastSend >= 3; // Once in 3 days
+          }
         }
       }
 
