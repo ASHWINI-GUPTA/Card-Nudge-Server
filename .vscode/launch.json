@@ -8,7 +8,7 @@
             "request": "launch",
             "name": "Launch Summary Program",
             "type": "node",
-            "program": "${workspaceFolder}/functions/generate-card-summaries/index.ts",
+            "program": "${workspaceFolder}/supabase/functions/generate-card-summaries/index.ts",
             "cwd": "${workspaceFolder}",
             "env": {},
             "runtimeExecutable": "/Volumes/External/Application/homebrew/bin/deno",
@@ -21,6 +21,24 @@
                 "--env-file=.env"
             ],
             "attachSimplePort": 9229
+        },
+        {
+            "request": "launch",
+            "name": "Launch Notification Program",
+            "type": "node",
+            "program": "${workspaceFolder}/supabase/functions/send-notification/index.ts",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "runtimeExecutable": "/Volumes/External/Application/homebrew/bin/deno",
+            "runtimeArgs": [
+                "run",
+                "--inspect-brk",
+                "--allow-env",
+                "--allow-read",
+                "--allow-net",
+                "--env-file=.env"
+            ],
+            "attachSimplePort": 9228
         }
     ]
 }
