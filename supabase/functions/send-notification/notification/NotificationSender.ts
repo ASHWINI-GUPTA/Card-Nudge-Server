@@ -171,6 +171,7 @@ export class NotificationSender {
       const billingDate = new Date(card.billing_date);
       const diffDaysBilling = getDaysDifference(now, billingDate);
       let shouldSendBilling = false;
+      const payload = `/card_details/${card.id}`;
 
       if (diffDaysBilling === 0) {
         shouldSendBilling = true; // Always send on billing day
@@ -209,7 +210,7 @@ export class NotificationSender {
           "billing",
           msg.title,
           msg.body,
-          `/cards/${card.id}`,
+          payload,
           tokens,
           logs,
           failedTokens,
