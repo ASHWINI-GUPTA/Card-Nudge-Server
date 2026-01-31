@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "npm:@google/genai@1.15.0";
+import { GoogleGenAI } from "@google/genai";
 import { Bank, Card } from "../shared/models.ts";
 
 const AI_API_KEY = Deno.env.get("AI_API_KEY");
@@ -60,7 +60,7 @@ Your task is to provide a comprehensive and structured breakdown of the key feat
 export async function generateSummary(card: Card, bank: Bank): Promise<string> {
   if (!AI_API_KEY || !genAI) {
     throw new Error(
-      "AI_API_KEY environment variable not set or AI client not initialized."
+      "AI_API_KEY environment variable not set or AI client not initialized.",
     );
   }
 
@@ -77,9 +77,8 @@ export async function generateSummary(card: Card, bank: Bank): Promise<string> {
     }
 
     console.log(
-      `Generated raw summary for "${card.name}": ${
-        summary.substring(0, 100) // Shorten summary to 100 chars
-      }...`
+      `Generated raw summary for "${card.name}": ${summary.substring(0, 100) // Shorten summary to 100 chars
+      }...`,
     );
     return summary;
   } catch (error) {
@@ -120,11 +119,11 @@ Markdown Output:
  * @throws Error if AI_API_KEY is not set or if the AI call fails.
  */
 export async function convertToMarkdown(
-  rawSummaryText: string
+  rawSummaryText: string,
 ): Promise<string> {
   if (!AI_API_KEY || !genAI) {
     throw new Error(
-      "AI_API_KEY environment variable not set or AI client not initialized."
+      "AI_API_KEY environment variable not set or AI client not initialized.",
     );
   }
 
@@ -141,7 +140,7 @@ export async function convertToMarkdown(
     }
 
     console.log(
-      `Generated Markdown summary: ${markdownSummary.substring(0, 100)}...`
+      `Generated Markdown summary: ${markdownSummary.substring(0, 100)}...`,
     );
     return markdownSummary;
   } catch (error) {

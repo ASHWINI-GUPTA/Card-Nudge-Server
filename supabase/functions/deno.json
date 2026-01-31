@@ -1,6 +1,7 @@
 {
   "imports": {
     "@google/genai": "npm:@google/genai@1.15.0",
-    "@supabase/supabase-js": "npm:@supabase/supabase-js@^2.50.1"
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@^2.50.1",
+    "@mock": "https://deno.land/std@0.224.0/testing/mock.ts"
   }
 }
